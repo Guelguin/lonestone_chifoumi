@@ -12,6 +12,8 @@ export default function Home() {
   const [userAction, setUserAction] = useState("");
   const [computerAction, setComputerAction] = useState("");
   const [result, setResult] = useState("");
+  const [userScore, setUserScore] = useState(0);
+  const [computerScore, setComputerScore] = useState(0);
 
   useEffect(() => {
     if (userAction != "") {
@@ -30,22 +32,28 @@ export default function Home() {
       return "🟰 DRAW";
     }
     if (userAction == "📄 PAPER" && computerAction == "✂️ SCISSORS") {
+      setComputerScore(computerScore + 1);
       return "🤖 COMPUTER WINS";
     }
-    if (userAction == "📄 PAPER" && computerAction == "🪨 ROCK") {
-      return "👨 USER WINS";
-    }
-    if (userAction == "🪨 ROCK" && computerAction == "✂️ SCISSORS") {
-      return "👨 USER WINS";
-    }
     if (userAction == "🪨 ROCK" && computerAction == "📄 PAPER") {
+      setComputerScore(computerScore + 1);
       return "🤖 COMPUTER WINS";
     }
     if (userAction == "✂️ SCISSORS" && computerAction == "🪨 ROCK") {
+      setComputerScore(computerScore + 1);
       return "🤖 COMPUTER WINS";
     }
+    if (userAction == "📄 PAPER" && computerAction == "🪨 ROCK") {
+      setUserScore(userScore + 1);
+      return "🙂 USER WINS";
+    }
+    if (userAction == "🪨 ROCK" && computerAction == "✂️ SCISSORS") {
+      setUserScore(userScore + 1);
+      return "🙂 USER WINS";
+    }
     if (userAction == "✂️ SCISSORS" && computerAction == "📄 PAPER") {
-      return "👨 USER WINS";
+      setUserScore(userScore + 1);
+      return "🙂 USER WINS";
     }
 
     return "";
@@ -61,34 +69,39 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className={styles.description}>
-          <p>Get started playing by choosing an action from below</p>
+          {userScore == 0 && computerScore == 0 && <p>Get started playing by choosing an action from below</p>}
+          {(userScore != 0 || computerScore != 0) && (
+            <span>
+              <p>
+                🤖 : {computerScore} - {userScore} : 🙂{" "}
+              </p>
+            </span>
+          )}
         </div>
 
-        <div className={styles.center}>
+        <div className={styles.center} style={{minWidth: 800}}>
           {userAction != "" && (
-            <div className={styles.card}>
-              <h2 className={inter.className}>{result}</h2>
+            <div className={styles.card} style={{ textAlign: "center" }}>
+              <h1 className={inter.className}>{result}</h1>
+              <br></br>
               <p className={inter.className} style={{ textAlign: "center" }}>
-                👨 {userAction} x {computerAction} 🤖{" "}
+                🙂 {userAction} ✖️ {computerAction} 🤖
               </p>
             </div>
           )}
-
-
-          
         </div>
         {userAction != "" && (
-            <div
-              className={styles.card}
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                setUserAction("");
-                setComputerAction("");
-              }}
-            >
-              <h2 className={inter.className}>Play again ?</h2>
-            </div>
-          )}
+          <div
+            className={styles.card}
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setUserAction("");
+              setComputerAction("");
+            }}
+          >
+            <h2 className={inter.className}>Play again ?</h2>
+          </div>
+        )}
 
         <div className={styles.grid} style={{ visibility: userAction == "" && computerAction == "" ? "visible" : "hidden" }}>
           <span
